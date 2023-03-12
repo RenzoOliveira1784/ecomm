@@ -24,7 +24,7 @@ function validationQuantidadeEstoque(estoque) {
 
 function validationId(id) {
     let i = mongoose.Types.ObjectId.isValid(id)
-    if (i)  
+    if (i)
         return true;
     return false;
 }
@@ -32,7 +32,7 @@ function validationId(id) {
 class ProductController {
 
 
-    static listProducts = (_req, res) => {
+    static listProducts =  (_req, res) => {
         products.find()
         .populate("categoria")
         .exec((_err, result) => {
@@ -40,19 +40,20 @@ class ProductController {
         })
     }
 
-    static listProductById = (req, res) => {
-        let { id } = req.params
-        products.findById(id, (err, result) => {
-            if(err) {
-                res.status(500).send({message: `${message.err} - Fail to find product by id`})
+    static listProductById = async (req, res) => {
+        const id = req.params.id;
+        products.findOne({_id: id}, (err, result) => {
+            if (!err) {
+                res.status(200).json(result);
             } else {
-                res.status(200).send(result)
+                res.status(400).send({message: `${err.message} - Id da categoria não encontrada`})
             }
         })
+
     }
 
-    static insertProduct = (req, res) => {
-        const product = new products(req.body);
+    static insertProduct = async (req, res) => {
+        const product =  new products(req.body);
         let v1 = validationName(product.nomeProduto)
         let v2 = validationPrecoUnitario(product.precoUnitario)
         let v3 = validationQuantidadeEstoque(product.quantidadeEmEstoque)
@@ -70,7 +71,7 @@ class ProductController {
         } else if (v5 == false) {
             res.status(400).send({message: `Não passou na ValidationId`})
         } else {
-            product.save((err) => {
+            await product.save((err) => {
                 if (err) {
                     res.status(500).send({message: `${message.err} - Fail to insert product`})
                 } else {
@@ -80,13 +81,14 @@ class ProductController {
         }
     }
 
-    static updateProduct = (req, res) => {
+    static updateProduct = async (req, res) => {
         let id = req.params.id;
         const product = new products(req.body);
         let v1 = validationName(product.nomeProduto)
         let v2 = validationPrecoUnitario(product.precoUnitario)
         let v3 = validationQuantidadeEstoque(product.quantidadeEmEstoque)
         let v4 = validationSlug(product.slug)
+        console.log(product)
         let v5 = validationId(product.categoria.id)
         
         if (v1 == false) {
@@ -100,19 +102,19 @@ class ProductController {
         } else if (v5 == false) {
             res.status(400).send({message: `Não passou na ValidationId`})
         } else {
-            products.findByIdAndUpdate(id, {$set: req.body}, (err) => {
-                if (err) {
-                    res.status(500).send({message: `${message.err} - Fail to update product`})
-                } else {
-                    res.status(200).send({message: `Category sucessfully updated`})
-                }
-            })
+            try {
+                await products.where({id})
+                    .update ({...req.body}) 
+                res.status(200).send({message: `Category sucessfully updated`})
+            } catch (err) {
+                res.status(500).send({message: `${message.err} - Fail to update product`})
+            }
         }
     }
 
     static deleteProduct = (req, res) => {
         let { id } = req.params
-        products.findByIdAndDelete(id, (err, result) => {
+        products.findByIdAndDelete(id, (err, _result) => {
             if (err) {
                 res.status(500).send({message: `${message.err} - Não conseguiu fazer a exclusão do produto`})
             } else {
