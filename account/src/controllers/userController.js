@@ -1,4 +1,5 @@
 import users from "../models/Users.js";
+import bcrypt from 'bcryptjs'
 
 function validationName(name) {
     let regex = /^\D.../gm
@@ -34,6 +35,15 @@ function validationState(state) {
     return false
 }
 
+function generateHashPassword (password) {
+    var salt = bcrypt.genSaltSync(10);
+    return bcrypt.hash(password, salt, (err) => {
+        if (err) {
+            console.log(`error hash ${err}`)
+        } 
+    })
+}
+
 class UserController {
     //implementação dos metodos
     static listUsers = (req, res) => {
@@ -60,7 +70,7 @@ class UserController {
             res.status(400).send({message: `Name validation failed`})
         } else if (validationEmail(User.email) == false) {
             res.status(400).send({message: `Email validation failed`})
-        } else if (validationPassword(User.senha) == false) {
+        } else if (validationPassword(User.senhaHash) == false) {
             res.status(400).send({message: `Password validation failed`})
         } else if (validationCpf(User.cpf) == false) {
             res.status(400).send({message: `Cpf validation failed`})
@@ -71,6 +81,7 @@ class UserController {
         } else if (validationState(User.endereco.estado) == false) {
             res.status(400).send({message: `State validation failed`})
         } else {
+            User.senhaHash = generateHashPassword(User.senhaHash)
             User.save((err) => {
                 if (err) {
                     res.status(500).send({message: `${err.message} - fail to insert User`})
@@ -88,7 +99,7 @@ class UserController {
             res.status(400).send({message: `Name validation failed`})
         } else if (validationEmail(User.email) == false) {
             res.status(400).send({message: `Email validation failed`})
-        } else if (validationPassword(User.senha) == false) {
+        } else if (validationPassword(User.senhaHash) == false) {
             res.status(400).send({message: `Password validation failed`})
         } else if (validationCpf(User.cpf) == false) {
             res.status(400).send({message: `Cpf validation failed`})
@@ -99,6 +110,7 @@ class UserController {
         } else if (validationState(User.endereco.estado) == false) {
             res.status(400).send({message: `State validation failed`})
         } else {
+            req.body.senhaHash = generateHashPassword(User.senhaHash)
             users.findByIdAndUpdate(id, {$set: req.body}, (err) => {
                 if(err) {
                     res.status(500).send({message: err.message})
@@ -120,6 +132,8 @@ class UserController {
             }
         })
     }
+
+
 }
 
 
