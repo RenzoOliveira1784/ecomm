@@ -1,5 +1,6 @@
 import users from "../models/Users.js";
-import bcrypt from 'bcryptjs'
+import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
 
 function validationName(name) {
     let regex = /^\D.../gm
@@ -44,6 +45,14 @@ function generateHashPassword (password) {
     })
 }
 
+function createTokenJWT(user) {
+    const payload = {
+        id: user.id
+    };
+
+    const token = jwt.sign(payload, process.env.KEY_JWT, {expiresIn: '1d'});
+    return token;
+}
 class UserController {
     //implementação dos metodos
     static listUsers = (req, res) => {
@@ -63,6 +72,11 @@ class UserController {
         })
     }
 
+    static login = (req, res) => {
+        const token = createTokenJWT(req.user);
+        res.set('Authorization', token);
+        res.status(204).send();
+    }
 
     static insertUser = (req, res) => {
         let User = new users(req.body);
