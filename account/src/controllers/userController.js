@@ -10,7 +10,7 @@ function validationEmail(email) {
     return regex.test(email);
 }
 function validationPassword(pas) {
-    var regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/gm
+    var regex = /^(?=.*?[A-Z])(?=(.*[a-z]){1,})(?=(.*[\d]){1,})(?=(.*[\W]){1,})(?!.*\s).{9,}$/gm
     return regex.test(pas)
 }
 function validationCpf(cpf) {
@@ -37,10 +37,10 @@ function validationState(state) {
 
 function generateHashPassword (password) {
     var salt = bcrypt.genSaltSync(10);
-    return bcrypt.hash(password, salt, (err) => {
+    return bcrypt.hashSync(password, salt, (err) => {
         if (err) {
             console.log(`error hash ${err}`)
-        } 
+        }
     })
 }
 
@@ -70,7 +70,7 @@ class UserController {
             res.status(400).send({message: `Name validation failed`})
         } else if (validationEmail(User.email) == false) {
             res.status(400).send({message: `Email validation failed`})
-        } else if (validationPassword(User.senhaHash) == false) {
+        } else if (validationPassword(User.senha) == false) {
             res.status(400).send({message: `Password validation failed`})
         } else if (validationCpf(User.cpf) == false) {
             res.status(400).send({message: `Cpf validation failed`})
@@ -81,7 +81,9 @@ class UserController {
         } else if (validationState(User.endereco.estado) == false) {
             res.status(400).send({message: `State validation failed`})
         } else {
-            User.senhaHash = generateHashPassword(User.senhaHash)
+            let senhaHash = generateHashPassword(User.senha)
+            User.senha = senhaHash
+            
             User.save((err) => {
                 if (err) {
                     res.status(500).send({message: `${err.message} - fail to insert User`})
@@ -99,7 +101,7 @@ class UserController {
             res.status(400).send({message: `Name validation failed`})
         } else if (validationEmail(User.email) == false) {
             res.status(400).send({message: `Email validation failed`})
-        } else if (validationPassword(User.senhaHash) == false) {
+        } else if (validationPassword(User.senha) == false) {
             res.status(400).send({message: `Password validation failed`})
         } else if (validationCpf(User.cpf) == false) {
             res.status(400).send({message: `Cpf validation failed`})
@@ -110,7 +112,7 @@ class UserController {
         } else if (validationState(User.endereco.estado) == false) {
             res.status(400).send({message: `State validation failed`})
         } else {
-            req.body.senhaHash = generateHashPassword(User.senhaHash)
+            req.body.senha = generateHashPassword(User.senha)
             users.findByIdAndUpdate(id, {$set: req.body}, (err) => {
                 if(err) {
                     res.status(500).send({message: err.message})
