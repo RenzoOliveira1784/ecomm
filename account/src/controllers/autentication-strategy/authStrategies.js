@@ -1,7 +1,8 @@
 import bcrypt from 'bcryptjs';
 import { Strategy as LocalStrategy } from 'passport-local';
+import { Strategy as BearerStrategy } from 'passport-http-bearer';
 import users from '../../models/Users.js'
-
+import jwt from 'jsonwebtoken'
 
 async function verificationPassword(senha, hashed) {
     return await bcrypt.compare(senha, hashed)
@@ -10,11 +11,10 @@ async function verificationPassword(senha, hashed) {
 
 const localStrategy = new LocalStrategy(
         {
-            usernameField: "nome",
+            usernameField: "name",
             passwordField: "senha",
             session: false,
         }, async (name, senha, done) => {
-            console.log('vamo')
             const user = await users.findOne({nome: name})
             try {    
                 if (!user) {
@@ -26,9 +26,21 @@ const localStrategy = new LocalStrategy(
                 }
                 done(null, user)
             } catch (err) {
-                console.log('aqui')
                 done(err);
             }
+        }
+    )
+
+    const bearerStrategy = new BearerStrategy (
+        async (token, done) => {
+            try {
+                const payload = jwt.verify(token, process.env.KEY_JWT);
+                const user = await users.findOne({ _id: payload.id });
+                done(null, user);
+            } catch (erro) {
+            done(erro);
+            }
+            
         }
     )
 
@@ -36,7 +48,7 @@ const localStrategy = new LocalStrategy(
 
 
 
-export default localStrategy;
+export {localStrategy, bearerStrategy};
 
 
 

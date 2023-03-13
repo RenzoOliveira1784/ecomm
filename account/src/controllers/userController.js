@@ -1,6 +1,7 @@
 import users from "../models/Users.js";
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
+import { v4 as uuidv4 } from 'uuid';
 
 function validationName(name) {
     let regex = /^\D.../gm
@@ -47,9 +48,9 @@ function generateHashPassword (password) {
 
 function createTokenJWT(user) {
     const payload = {
-        id: user.id
+        id: user._id
     };
-
+    console.log(user._id)
     const token = jwt.sign(payload, process.env.KEY_JWT, {expiresIn: '1d'});
     return token;
 }
@@ -80,6 +81,7 @@ class UserController {
 
     static insertUser = (req, res) => {
         let User = new users(req.body);
+        User.id = uuidv4();
         if (validationName(User.nomeCategoria) == false) {
             res.status(400).send({message: `Name validation failed`})
         } else if (validationEmail(User.email) == false) {

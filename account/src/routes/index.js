@@ -1,6 +1,6 @@
 // concentrar todas as rotas da aplicação
 import express from "express";
-import users from "./userRoute.js";
+import users from "./userRouter.js";
 
 const routes = (app) => {
     app.route('/').get((req, res) => {
