@@ -1,4 +1,7 @@
 import users from "../models/Users.js";
+import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
+import { v4 as uuidv4 } from 'uuid';
 
 function validationName(name) {
     let regex = /^\D.../gm
@@ -9,7 +12,7 @@ function validationEmail(email) {
     return regex.test(email);
 }
 function validationPassword(pas) {
-    var regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/gm
+    var regex = /^(?=.*?[A-Z])(?=(.*[a-z]){1,})(?=(.*[\d]){1,})(?=(.*[\W]){1,})(?!.*\s).{9,}$/gm
     return regex.test(pas)
 }
 function validationCpf(cpf) {
@@ -34,6 +37,23 @@ function validationState(state) {
     return false
 }
 
+function generateHashPassword (password) {
+    var salt = bcrypt.genSaltSync(10);
+    return bcrypt.hashSync(password, salt, (err) => {
+        if (err) {
+            console.log(`error hash ${err}`)
+        }
+    })
+}
+
+function createTokenJWT(user) {
+    const payload = {
+        id: user._id
+    };
+    console.log(user._id)
+    const token = jwt.sign(payload, process.env.KEY_JWT, {expiresIn: '1d'});
+    return token;
+}
 class UserController {
     //implementação dos metodos
     static listUsers = (req, res) => {
@@ -53,9 +73,15 @@ class UserController {
         })
     }
 
+    static login = (req, res) => {
+        const token = createTokenJWT(req.user);
+        res.set('Authorization', token);
+        res.status(204).send();
+    }
 
     static insertUser = (req, res) => {
         let User = new users(req.body);
+        User.id = uuidv4();
         if (validationName(User.nomeCategoria) == false) {
             res.status(400).send({message: `Name validation failed`})
         } else if (validationEmail(User.email) == false) {
@@ -71,6 +97,9 @@ class UserController {
         } else if (validationState(User.endereco.estado) == false) {
             res.status(400).send({message: `State validation failed`})
         } else {
+            let senhaHash = generateHashPassword(User.senha)
+            User.senha = senhaHash
+            
             User.save((err) => {
                 if (err) {
                     res.status(500).send({message: `${err.message} - fail to insert User`})
@@ -99,6 +128,7 @@ class UserController {
         } else if (validationState(User.endereco.estado) == false) {
             res.status(400).send({message: `State validation failed`})
         } else {
+            req.body.senha = generateHashPassword(User.senha)
             users.findByIdAndUpdate(id, {$set: req.body}, (err) => {
                 if(err) {
                     res.status(500).send({message: err.message})
@@ -120,6 +150,8 @@ class UserController {
             }
         })
     }
+
+
 }
 
 

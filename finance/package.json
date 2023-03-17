@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "node --experimental-vm-modules node_modules/jtest/bin/jest.js",
     "dev": "nodemon index.js"
   },
   "author": "",
@@ -14,10 +14,12 @@
     "express": "^4.18.2",
     "mysql2": "^3.1.2",
     "path": "^0.12.7",
-    "sequelize": "^5.21.7",
-    "sequelize-cli": "^5.5.1"
+    "sequelize": "^6.29.0",
+    "sequelize-cli": "^5.5.1",
+    "supertest": "^6.3.3"
   },
   "devDependencies": {
+    "jest": "^29.5.0",
     "nodemon": "^2.0.20"
   }
 }
