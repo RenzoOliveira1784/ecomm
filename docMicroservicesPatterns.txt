@@ -1,0 +1,77 @@
+Microservices Patterns
+
+1. Domain Services
+Pegar um pequeno dominio da aplicação e separar isso em um serviço,
+que vai fornecer o acesso aos dados desse domínio.
+Exemplo, pegar a entidade de  usuário e separar isso em um dominio.
+Apos essa modelagem, os serviços relacionados ao dominio de usuário,
+como uma inserção de usuário, ou atualização estariam nesse serviço.
+Nesse Ecommerce isso não está definido por inteiro, existem requisições
+que fazem parte de serviços, mas não estão totalmente separados.
+
+2.Serviços de negócio
+Operações que demandam de mais de um domínio, ou seja, a junção de
+diferentes domínios diferentes. A aplicabilidade disso é factivel
+no Ecommerce, mas vai depender dos serviços de dominio primeiro.
+
+3.API Gateway
+Serviço para organizar todos os microsserviços.
+Vai autorizar e redirecionar as request,
+pode adicionar informarções ao request, com o uso de decorator,
+pode limitar o acesso ao conteúdo trafegado.
+No Ecommerce seria aplicável, porém apenas quando os serviços já
+estivessem separados.
+
+4.Agregador de processos
+Agrega os processos de serviços de negócio, não é tão comum e só ocorre
+quando é necessário usar um processo que dependa de vários outros, tornando
+isso mais complexo. No Ecommerce talvez fosse legal que tivesse um agregador
+de processos para a compra do produto, pois teria que atualizar o carrinho, os
+serviços de negocio, e até nas entidades. Como ainda não foram explicitadas e
+separadas é dificil ter uma visão exata agora, porem é factível.
+
+5.Edge service
+Um edge service é basicamente um gateway serviço específico para cada cliente. 
+Seria meio que usar saídas específicas para um cliente que precisa de uma 
+customização no recebido. Isso faz com que o cliente tenha necessidades específicas
+atendidas e a aplicação seja mais relevante para melhorar a experiência dele.
+Isso pode ser muito aplicável nesse Ecommerce, ainda não é feito, mas uma personalização
+de produtos para pessoas que buscam móveis, outra para os que buscam eletrônicos, livros,
+seria de grande valia para o projeto.
+
+
+6.Single database vs Bancos diferentes
+No caso do Ecommerce, existem 2 bancos diferentes que são utilizados
+para guardar as informações, o MONGO e o MYSQL. Fazendo uma análise 
+primária é possível inferir que o MONGO seria o melhor utilizado, por 
+enquanto e que não haveria muito a necessidade do MYSQL. Isso, porém 
+poderia mudar rapidamente, depois de a aplicação se tornar separada em
+microsserviços. Algo que é relevante é que como cada serviço teria
+seu prórpio banco, teria que ser feita uma análise caso a caso.
+
+7.Eventos assíncronos‌
+Eventos que tem necessidade assíncrona. Um cenário é algo que não é
+possível ser resolvido a tempo, como uma compra de um produto, na qual
+todo o processo de realizar a segurança, confirmar com as bandeiras e 
+bancos, demora um pouco mais e deve ser esperado antes da aprovação
+de compra. No Ecommerce o ideal é que existam eventos assíncronos‌, mas
+pode ser que um serviço como uma fila de confirmação e o kafka organizam
+isso melhor, essa foi a abordagem pensada, porém, no cenário atual, existem
+eventos assíncronos, mas principalmente os consulta nos bancos de dados.
+
+8.Agregação de logs
+A importância é que eles sigam um mesmo padrão e sejam agregados. Por isso,
+é importante unit e organizá-los de forma correta, um serviço externo 
+seria ideal para fazer isso, mas para que os relatórios sigam the 12 factory app
+é bom que isso aconteça na saída padrão, no terminal. Algo fndamental disso, é 
+que pela aplicação estar distribuída, a lógica dos output deve estar bem conscisa
+e bem feita, pois isso tambem vai influenciar no debug do sistema.
+No Ecommerce isso ainda segue, pois a aplicação é monolítica, então não existem
+muitos problemas por enquanto, porém quando for feita separação dos microsserviços,
+isso deverá ser um ponto de atenção.
+
+9.Agregação de métricas
+O status dos microsserviços deve ser conhecido e pra isso, métricas são
+os indicadores que mensuram se cada serviço está tendo muitas requisições em 
+determinado momento e fazer algo a respeito sobre os recursos. Nesse Ecommerce,
+isso não acontece, mas agora se percebe a importância e isso é um próximo passo.
