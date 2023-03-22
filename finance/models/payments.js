@@ -10,6 +10,7 @@ module.exports = (sequelize, DataTypes) => {
   }, {});
   Payments.associate = function(models) {
     // associations can be defined here
+    Payments.hasOne(models.Invoice, {foreignKey: 'invoiceId'})
   };
   return Payments;
 };
