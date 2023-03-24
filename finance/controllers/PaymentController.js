@@ -64,7 +64,7 @@ class PaymentController {
         }
     }
 
-    static async updatePayment (req, res) {
+    static async updatePaymentCancel (req, res) {
         let { id } = req.params
         let status1 = req.body
         
@@ -72,7 +72,7 @@ class PaymentController {
             const pay = await database.Payments.findOne({where: {id: id}})
             if (pay.status === "CREATED") {
                 await database.Payments.update(status1, { where: {id: id}})
-                return res.status(200).json({message: `Sucess`})
+                return res.status(200).json({message: `Sucess Cancel`})
             }
             else {
                 return res.status(400).json({message: `Payment status different than CREATED, action stopped`})
@@ -80,6 +80,26 @@ class PaymentController {
         } catch (error){
             return res.status(500).json(error)
         }   
+    }
+
+    static async updatePaymentConfirm (req, res) {
+        //clients data and order infos ----> invoice (nota fiscal)
+        let { id } = req.params
+        const all = req.body
+        
+        try {
+            const pay = await database.Payments.findOne({where: {id: id}})
+            if (pay.status === "CREATED") {
+                await database.Payments.update({ status: "CONFIRMED" }, { where: {id: id}})
+                let result = await database.Invoice.create({ all })
+                return res.status(200).json({message: `Payment confirmed and invoice: ${result}`})
+            }
+            else {
+                return res.status(400).json({message: `Payment status different than CREATED, action stopped`})
+            }
+        } catch (error){
+            return res.status(500).json(error)
+        }
     }
 
 }
