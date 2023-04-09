@@ -1,0 +1,48 @@
+Decisões de arquitetura do projeto do Ecommerce com microsserviços
+
+1. padronização ou não das stacks do serviço e, se sim, qual(is) seria(m) as stacks ideais
+O ideal seria ter uma padronização dessas stacks, no Ecommerce isso não acontece, 2 bancos
+de dados diferentes são utilizados, o MYSQL e o MONGO. O uso do MONGO como único seria uma 
+decisão assertiva para ganhar flexibilidade dos bancos não relacionais em todo o projeto.
+O node como framework de backend já é o padrão do Ecommerce. A aplicabilidade é muito
+viável e seria uma decisão mais assertiva a longo prazo. 
+
+2. solução para service discovery
+A importância do service discovery é que as quedas por sobrecarga de requisições não vai acontecer,
+ja que o service discovery percebe isso e cria mais instâncias para escalar o sistema alem de gerenciar
+os IPs de cada máquina e verificar a saúde das máquinas. Várias tecnologias fazem essa implementação,
+mas a aplicabilidade no Ecommerce é a mesma, aumentar a disponibilidade e fazer os serviços escalarem
+em várias instâncias.
+
+
+3. aspectos de segurança (rede, aplicação e segurança em repouso)
+O importante na segurança em projetos de microsserviços é uma redundância de segurança.
+Por terem bem mais pontos de ataque que uma aplicação monolítica, essa abordagem é ideal. 
+Para isso, é válido deixar os microsserviços em uma rede virtual, liberar os acesso a
+cada um apenas pelo API Gateway(que tem um firewall), autenticação em JWT e autorização
+baseado em papeis(RBAC). Criptografia nos Bancos de dados com funções de hash.
+
+4. tecnologias a adotar para deploy e build
+Sobre o build, como o Ecommerce está todo conteinerizado pelo docker, o ideal é que 
+continue assim e o deploy seja feito a partir disso. A ferramenta melhor aplicável
+do deploy é o githubActions, pois o projeto está todo no github e a integração fica mais
+facil.
+
+
+5. como lidar com tolerância a falhas em aplicações síncronas (circuit breaker, cache)
+A tolerância a falha de circuit breaker basicamente faz a aplicação não parar de vez,
+caso algum microsserviço esteja fora do ar. Se a taxa de erro exceder o limite de requisições,
+o circuit breaker vai e impede novas solicitações de acontecerem, falhando imediatamente.
+Assim, o cliente deve tentar conexão após um tempo e se conseguir o circuit breaker fecha.
+A estratégia de evitar falhas no chace é atualizar a entrada do chache periodicamente com um
+scheduler(refresh-ahead). Isso evitará aumento de latência.
+A desvantagem é que se os dados não mudarem com muita frequência, faremos muitas solicitações redundantes.
+
+
+6. em que pontos faz sentido usar comunicação assíncrona
+Nos pontos em que esperar a resposta da requisição seja demorado demais e afete 
+o tempo de resposta hábil. A regra crítica é que se dois serviços precisam estar
+integrados, a comunicação entre eles deve ser assícrona, outra informação importante
+são as tecnologias de mensageria, como o RabbitMQ ou o kafka(seja qual for implementado).
+Isso deve ocorrer no microsserviço de "order" com o de "products".
+
