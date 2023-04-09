@@ -1,8 +1,11 @@
 const express = require('express')
 const routes = require('./routes/index.js')
+const dotenv = require('dotenv');
+
+dotenv.config();
 
 const app = express()
-const port = 4001
+const port = process.env.FINANCE_PORT || 3024
 
 routes(app)
 

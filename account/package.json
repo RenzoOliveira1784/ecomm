@@ -1,25 +1,26 @@
 {
   "name": "account",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "server.js",
   "directories": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "scripts": {
-    "start": "node ./test/createUserAccount.test.js",
+    "start": "node server.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon src/server.js"
+    "dev": "nodemon server.js"
   },
   "author": "Renzo Oliveira",
   "license": "ISC",
   "type": "module",
   "description": "",
   "dependencies": {
+    "dotenv": "^16.0.3",
     "express": "^4.18.2",
     "mongoose": "^6.9.1",
     "swagger-ui-express": "^4.6.0"
   },
   "devDependencies": {
-    "nodemon": "^2.0.20"
+    "nodemon": "^2.0.22"
   }
 }

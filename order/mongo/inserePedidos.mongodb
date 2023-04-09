@@ -1,5 +1,5 @@
 use('ecomm-order')
-db.createCollection('pedidos')
+db.createCollection('orders')
 
 use('ecomm-order')
 db.pedidos.insertMany([
