@@ -1,4 +1,4 @@
-const database = require('../models')
+const database = require('../models/index.js')
 
 function validationCvv(cvv) {
     let regex = /^\d..$/gm

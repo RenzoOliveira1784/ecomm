@@ -3,31 +3,124 @@ services:
   product:
     container_name: ecomm-product
     build: ./product
+    ports: 
+      - 3011:3011
+    volumes:
+      - ./product
+    environment:
+      - MYSQL_PORT=3306
+      - MONGO_PORT=27017
+      - PRODUCT_PORT=3011
+      - ACCOUNT_PORT=3012
+      - ORDER_PORT=3013
+      - FINANCE_PORT=3024
+      - KEY_JWT=wsUpWvsBMwHtjOKI14vNrqxcM81ZbSNzVLwoID4idshIactnCnWWTk8DeIorMUkCTnfmW+M0Z/0ET72CA1qMk5zkQuZBJ1P2gD8Ip1jySB8pRtVr00O3i7IlyLq58XkgSPGY5/4OrdVpG/XAZBUcjhQHlwGYtgMxyvHpG/iWTbw6M8fvPpinvxVnLxpfsXI+bm223TgMRqNKloksXsBVU3G7KGEmUdPD87/4FD6IjvYOZm/Z3A/Bk1k1nrwSTXShRdDAnjv0nYQWgn45qaAxjzdqK+RZELT/LALvLe3rAZD57ZoYW+2NlksJrf3aWyJBWdfRhuOXZ9ZUbxLcvhXcIg==
+      - DB_HOST=mongo
+      - DB_PORT=27017
+      - DB_USER=admin
+    depends_on:
+      - mongo
   account:
     container_name: ecomm-account
     build: ./account
+    ports: 
+      - 3012:3012
+    volumes:
+      - ./account
+    environment:
+      - MYSQL_PORT=3306
+      - MONGO_PORT=27017
+      - PRODUCT_PORT=3011
+      - ACCOUNT_PORT=3012
+      - ORDER_PORT=3013
+      - FINANCE_PORT=3024
+      - DB_HOST=mongo
+      - DB_PORT=27017
+      - DB_USER=admin
+    depends_on:
+      - mongo
+  
+  order:
+    container_name: ecomm-order
+    build: ./order
+    volumes:
+      - ./orders
+    ports: 
+      - 3013:3013
+    environment:
+      - MYSQL_PORT=3306
+      - MONGO_PORT=27017
+      - PRODUCT_PORT=3011
+      - ACCOUNT_PORT=3012
+      - ORDER_PORT=3013
+      - FINANCE_PORT=3024
+      - DB_HOST=mongo
+      - DB_PORT=27017
+      - DB_USER=admin
+
+    depends_on:
+      - mongo
+      - mysql
+      - product
+      - account
+      - finance
+  finance:
+    container_name: ecomm-finance
+    build: ./finance
+    volumes:
+      - ./finance
+    ports: 
+      - 3024:3024
+    environment:
+      - MYSQL_PORT=3306
+      - MONGO_PORT=27017
+      - PRODUCT_PORT=3011
+      - ACCOUNT_PORT=3012
+      - ORDER_PORT=3013
+      - FINANCE_PORT=3024
+    depends_on:
+      - mysql
   mongo:
     container_name: mongo-ecomm
-    image: mongo
+    image: mongo:5
     restart: always
     ports:
       - 27017:27017
+    volumes:
+      - db-mongo:/store
     environment:
-      MONGO_INITDB_ROOT_USERNAME: admin
-      MONGO_INITDB_ROOT_PASSWORD: secret
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=secret
+      - MYSQL_PORT=3306
+      - MONGO_PORT=27017
+      - PRODUCT_PORT=3011
+      - ACCOUNT_PORT=3012
+      - ORDER_PORT=3013
+      - FINANCE_PORT=3024
+      - DB_HOST=mongo
+      - DB_PORT=27017
+      - DB_USER=admin
   
   mysql:
     container_name: mysql-ecomm
     image: mysql
     restart: always
     volumes:
-      - ecomm-mysql-volume:/var/lib/mysql
+      - ecomm-mysql
     ports: 
       - 3306:3306
     environment:
-      MYSQL_ROOT_USERNAME: root
-      MYSQL_ROOT_PASSWORD: secret
-  
+      - MYSQL_ROOT_USERNAME=root
+      - MYSQL_ROOT_PASSWORD=secret
+      - MYSQL_PORT=3306
+      - MONGO_PORT=27017
+      - PRODUCT_PORT=3011
+      - ACCOUNT_PORT=3012
+      - ORDER_PORT=3013
+      - FINANCE_PORT=3024
+
+    depends_on:
+      - mongo
 volumes:
-  ecomm-mysql-volume:
-    external: true
+  ecomm-mysql:
+  db-mongo:
