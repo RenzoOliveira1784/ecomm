@@ -2,7 +2,7 @@ use('ecomm-product');
 db.prodCateg.createIndex({ slug: 1 })
 
 use('ecomm-product');
-db.prodCateg.createIndex({ nomeProduto: 1 })
+db.prodCateg.createIndex({ productName: 1 })
 
 use('ecomm-product');
-db.prodCateg.createIndex({ precoUnitario: 1 })
+db.prodCateg.createIndex({ unitPrice: 1 })

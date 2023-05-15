@@ -50,7 +50,7 @@ function createTokenJWT(user) {
     const payload = {
         id: user._id
     };
-    console.log(user._id)
+    //console.log(user._id)
     const token = jwt.sign(payload, process.env.KEY_JWT, {expiresIn: '1d'});
     return token;
 }
@@ -82,23 +82,24 @@ class UserController {
     static insertUser = (req, res) => {
         let User = new users(req.body);
         User.id = uuidv4();
-        if (validationName(User.nomeCategoria) == false) {
+        if (validationName(User.name) == false) {
             res.status(400).send({message: `Name validation failed`})
         } else if (validationEmail(User.email) == false) {
             res.status(400).send({message: `Email validation failed`})
-        } else if (validationPassword(User.senha) == false) {
+        } else if (validationPassword(User.password) == false) {
             res.status(400).send({message: `Password validation failed`})
         } else if (validationCpf(User.cpf) == false) {
             res.status(400).send({message: `Cpf validation failed`})
-        } else if (validationCep(User.endereco.cep) == false) {
+        } else if (validationCep(User.address.cep) == false) {
             res.status(400).send({message: `Cep validation failed`})
-        } else if (validationFone(User.telefone) == false) {
+        } else if (validationFone(User.phoneNumber) == false) {
             res.status(400).send({message: `PhoneNumber validation failed`})
-        } else if (validationState(User.endereco.estado) == false) {
+        } else if (validationState(User.address.state) == false) {
             res.status(400).send({message: `State validation failed`})
         } else {
-            let senhaHash = generateHashPassword(User.senha)
-            User.senha = senhaHash
+            let passwordHash = generateHashPassword(User.password)
+            User.password = passwordHash
+            User.userCreationDate = new Date();
             
             User.save((err) => {
                 if (err) {
@@ -113,22 +114,22 @@ class UserController {
     static updateUser = (req, res) => {
         const id = req.params.id;
         let User = new users(req.body);
-        if (validationName(User.nomeCategoria) == false) {
+        if (validationName(User.name) == false) {
             res.status(400).send({message: `Name validation failed`})
         } else if (validationEmail(User.email) == false) {
             res.status(400).send({message: `Email validation failed`})
-        } else if (validationPassword(User.senha) == false) {
+        } else if (validationPassword(User.password) == false) {
             res.status(400).send({message: `Password validation failed`})
         } else if (validationCpf(User.cpf) == false) {
             res.status(400).send({message: `Cpf validation failed`})
-        } else if (validationCep(User.endereco.cep) == false) {
+        } else if (validationCep(User.address.cep) == false) {
             res.status(400).send({message: `Cep validation failed`})
-        } else if (validationFone(User.telefone) == false) {
+        } else if (validationFone(User.phoneNumber) == false) {
             res.status(400).send({message: `PhoneNumber validation failed`})
-        } else if (validationState(User.endereco.estado) == false) {
+        } else if (validationState(User.address.state) == false) {
             res.status(400).send({message: `State validation failed`})
         } else {
-            req.body.senha = generateHashPassword(User.senha)
+            req.body.passoword = generateHashPassword(User.password)
             users.findByIdAndUpdate(id, {$set: req.body}, (err) => {
                 if(err) {
                     res.status(500).send({message: err.message})

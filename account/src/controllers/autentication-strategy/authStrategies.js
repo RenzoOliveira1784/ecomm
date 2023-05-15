@@ -4,25 +4,25 @@ import { Strategy as BearerStrategy } from 'passport-http-bearer';
 import users from '../../models/Users.js'
 import jwt from 'jsonwebtoken'
 
-async function verificationPassword(senha, hashed) {
-    return await bcrypt.compare(senha, hashed)
+async function verificationPassword(password, hashed) {
+    return await bcrypt.compare(password, hashed)
 }
 
 
 const localStrategy = new LocalStrategy(
         {
             usernameField: "name",
-            passwordField: "senha",
+            passwordField: "password",
             session: false,
-        }, async (name, senha, done) => {
-            const user = await users.findOne({nome: name})
+        }, async (name, password, done) => {
+            const user = await users.findOne({name: name})
             try {    
                 if (!user) {
                     return done(null, false, {message:`Cannot find user with name - ${name}`})
                 }
-                const verifyPassword = await verificationPassword(senha, user.senha)
+                const verifyPassword = await verificationPassword(password, user.password)
                 if (!verifyPassword) {
-                    throw console.error("Wrong paswword");
+                    throw console.error("Wrong password");
                 }
                 done(null, user)
             } catch (err) {

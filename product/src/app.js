@@ -1,6 +1,6 @@
 import express from "express";
 import swaggerUi from "swagger-ui-express";
-import db from "./config/dbConenect.js";
+import db from "./config/dbConnect.js";
 import routes from "./routes/index.js"
 //import swaggerAccount from "../swagger/product.json" assert {type: "json"};
 

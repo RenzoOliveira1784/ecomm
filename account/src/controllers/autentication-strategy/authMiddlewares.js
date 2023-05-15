@@ -16,7 +16,7 @@ const middleware = {
                     return res.status(500).json({ error: error.message });
                 }
                 if (!user) {
-                    return res.status(400).json({message: "aqui"});
+                    return res.status(400).json({message: "User doesn't exist"});
                 }
                 req.user = user;
                 return next();

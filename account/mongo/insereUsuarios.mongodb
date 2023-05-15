@@ -1,53 +1,52 @@
 use('ecomm-account')
-db.createCollection('Usuario')
 
-db.Usuario.insertMany([
+db.user.insertMany([
     {
-        nome: "Pietra Antônia Mirella",
+        name: "Pietra Antônia Mirella",
         email: "PAM@email.com",
-        senha: "$2a$12$4ThSwoht49hboweKHQW6AeMgveRp4dx3YQ8DORW236v0xsJRmiUXO",
-        dataCriacaoUsuario: new ISODate(),
-        cpf: "615.010.623-36",
-        telefone: "(86) 99868-8578",
-        endereco: {
-            rua: "Rua Santa Helena",
-            numero: "291",
-            complemente: "apt 102",
-            cep: "64071-695",
-            cidade: "Teresina",
-            estado: "PI"
+        password: "$2a$12$4ThSwoht49hboweKHQW6AeMgveRp4dx3YQ8DORW236v0xsJRmiUXO",
+        userCreationDate: new ISODate(),
+        cpf: "61501062336",
+        phoneNumber: "86998688578",
+        address: {
+            street: "Rua Santa Helena",
+            number: "291",
+            complement: "apt 102",
+            cep: "64071695",
+            city: "Teresina",
+            state: "PI"
         }
     },
     {
-        nome: "Marcos Roberto Vieira",
+        name: "Marcos Roberto Vieira",
         email: "MRV@email.com",
-        senha: "$2a$12$5qhJPzsoajMtQRnRVX9RNeMEtYAkkxzvWjyrEq3AvfeSDp4FQzYSW",
-        dataCriacaoUsuario: new ISODate(),
-        cpf: "970.049.701-16",
-        telefone: "(66) 98643-9141",
-        endereco: {
-            rua: "Avenida João Ponce de Arruda",
-            numero: "132",
-            complemente: "apt 302",
-            cep: "78745-040",
-            cidade: "Rondonópolis",
-            estado: "MT"
+        password: "$2a$12$5qhJPzsoajMtQRnRVX9RNeMEtYAkkxzvWjyrEq3AvfeSDp4FQzYSW",
+        userCreationDate: new ISODate(),
+        cpf: "97004970116",
+        phoneNumber: "66986439141",
+        address: {
+            street: "Avenida João Ponce de Arruda",
+            number: "132",
+            complement: "apt 302",
+            cep: "78745040",
+            city: "Rondonópolis",
+            state: "MT"
         }
     },
     {
-        nome: "Alana Beatriz Cecília Ramos",
+        name: "Alana Beatriz Cecília Ramos",
         email: "ABCR@email.com",
-        senha: "$2a$12$LkVzIq62epDcoxC7/G2S7Og3eUdwfxYAr6zSt81apfTzsk4Q/uS8e",
-        dataCriacaoUsuario: new ISODate(),
-        cpf: "901.369.698-87",
-        telefone: "(11) 98741-9052",
-        endereco: {
-            rua: "Avenida João Ponce de Arruda",
-            numero: "132",
-            complemente: "apt 302",
-            cep: "78745-040",
-            cidade: "Rondonópolis",
-            estado: "MT"
+        password: "$2a$12$LkVzIq62epDcoxC7/G2S7Og3eUdwfxYAr6zSt81apfTzsk4Q/uS8e",
+        userCreationDate: new ISODate(),
+        cpf: "90136969887",
+        phoneNumber: "11987419052",
+        address: {
+            street: "Avenida João Ponce de Arruda",
+            number: "132",
+            complement: "apt 302",
+            cep: "78745040",
+            city: "Rondonópolis",
+            state: "MT"
         }
     }
 

@@ -9,4 +9,4 @@ router
     .post("/products", ProductController.insertProduct)
     .put("/products/:id", ProductController.updateProduct)
     .delete("/products/:id", ProductController.deleteProduct)
-export default router;
+export default router; 

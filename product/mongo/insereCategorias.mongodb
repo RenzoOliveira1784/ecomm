@@ -1,12 +1,12 @@
 use('ecomm-product');
 db.categories.insertMany([
-    { nomeCategoria: "INFORMÁTICA", statusCategoria: "ATIVA" },
-    { nomeCategoria: "BELEZA", statusCategoria: "INATIVA" },
-    { nomeCategoria: "CELULARES", statusCategoria: "ATIVA" },
-    { nomeCategoria: "MÓVEIS", statusCategoria: "ATIVA" },
-    { nomeCategoria: "LUXO", statusCategoria: "INATIVA" },
-    { nomeCategoria: "ESPORTE", statusCategoria: "INATIVA" },
-    { nomeCategoria: "AUTOMOTIVA", statusCategoria: "ATIVA" },
-    { nomeCategoria: "LIVROS", statusCategoria: "ATIVA" }
+    { categoryName: "INFORMÁTICA", statusCategory: "ATIVA" },
+    { categoryName: "BELEZA", statusCategory: "INATIVA" },
+    { categoryName: "CELULARES", statusCategory: "ATIVA" },
+    { categoryName: "MÓVEIS", statusCategory: "ATIVA" },
+    { categoryName: "LUXO", statusCategory: "INATIVA" },
+    { categoryName: "ESPORTE", statusCategory: "INATIVA" },
+    { categoryName: "AUTOMOTIVA", statusCategory: "ATIVA" },
+    { categoryName: "LIVROS", statusCategory: "ATIVA" }
 ]);
 

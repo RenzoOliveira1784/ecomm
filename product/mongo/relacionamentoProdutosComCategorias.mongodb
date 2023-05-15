@@ -1,10 +1,9 @@
 use('ecomm-product');
-db.products.find({}).forEach((product) => {
+db.product.find({}).forEach((product) => {
     const eachCateg = db.categories.find(
-        { nomeCategoria: product.categoria }
+        { categoryName: product.category }
     ).toArray()[0];
 
-    product.categoria = eachCateg;
 
     db.prodCateg.insertOne({
        /* nomeProduto: product.nomeProduto,
@@ -13,7 +12,7 @@ db.products.find({}).forEach((product) => {
         precoUnitario: product.precoUnitario,
         quantidadeEmEstoque: product.quantidadeEmEstoque, */
         ...product,
-        categoria: product.categoria
+        category: eachCateg
     })
 })
 

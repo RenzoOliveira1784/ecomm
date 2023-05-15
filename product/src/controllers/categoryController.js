@@ -29,7 +29,7 @@ class CategoryController {
 
     static insertCategory = (req, res) => {
         let category = new categories(req.body);
-        if (validationName(category.nomeCategoria) == false) {
+        if (validationName(category.categoryName) == false) {
             res.status(400).send({message: `Name validation failed`})
         } else {
             category.save((err) => {
@@ -55,7 +55,7 @@ class CategoryController {
 
     static activateCategory = (req, res) => {
         const id = req.params.id;
-        categories.findByIdAndUpdate(id, {$set: {"statusCategoria": "ATIVA"}}, (err) => {
+        categories.findByIdAndUpdate(id, {$set: {"statusCategory": "ATIVA"}}, (err) => {
             if (err) {
                 res.status(500).send({message: `${err.message} - fail to activate category`})
             } else {

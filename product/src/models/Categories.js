@@ -5,8 +5,8 @@ import mongoose from "mongoose";
 const categorySchema = new mongoose.Schema(
     {
         id: {type: String},
-        nomeCategoria: {type: String, required: true},
-        statusCategoria: {type: String}
+        categoryName: {type: String, required: true},
+        statusCategory: {type: String}
     }
 )
 

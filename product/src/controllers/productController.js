@@ -34,7 +34,7 @@ class ProductController {
 
     static listProducts =  (_req, res) => {
         products.find()
-        .populate("categoria")
+        //.populate("categories")
         .exec((_err, result) => {
             res.status(200).send(result)
         })
@@ -54,11 +54,12 @@ class ProductController {
 
     static insertProduct = async (req, res) => {
         const product =  new products(req.body);
-        let v1 = validationName(product.nomeProduto)
-        let v2 = validationPrecoUnitario(product.precoUnitario)
-        let v3 = validationQuantidadeEstoque(product.quantidadeEmEstoque)
+        let v1 = validationName(product.productName)
+        let v2 = validationPrecoUnitario(product.unitPrice)
+        let v3 = validationQuantidadeEstoque(product.stockQuantity)
         let v4 = validationSlug(product.slug)
-        let v5 = validationId(product.categoria.id)
+        
+        //let v5 = validationId(product.id)
 
         if (v1 == false) {
             res.status(400).send({message: `Não passou na ValidationName`})
@@ -68,8 +69,9 @@ class ProductController {
             res.status(400).send({message: `Não passou na ValidationQuantidadeEstoque`})
         } else if (v4 == false) {
             res.status(400).send({message: `Não passou na ValidationSlug`})
-        } else if (v5 == false) {
-            res.status(400).send({message: `Não passou na ValidationId`})
+        // } else if (v5 == false) {
+        //     res.status(400).send({message: `Não passou na ValidationId`})
+        // 
         } else {
             await product.save((err) => {
                 if (err) {
@@ -84,12 +86,11 @@ class ProductController {
     static updateProduct = async (req, res) => {
         let id = req.params.id;
         const product = new products(req.body);
-        let v1 = validationName(product.nomeProduto)
-        let v2 = validationPrecoUnitario(product.precoUnitario)
-        let v3 = validationQuantidadeEstoque(product.quantidadeEmEstoque)
+        let v1 = validationName(product.productName)
+        let v2 = validationPrecoUnitario(product.unitPrice)
+        let v3 = validationQuantidadeEstoque(product.stockQuantity)
         let v4 = validationSlug(product.slug)
-        console.log(product)
-        let v5 = validationId(product.categoria.id)
+        //let v5 = validationId(product.id)
         
         if (v1 == false) {
             res.status(400).send({message: `Não passou na ValidationName`})
@@ -99,8 +100,8 @@ class ProductController {
             res.status(400).send({message: `Não passou na ValidationQuantidadeEstoque`})
         } else if (v4 == false) {
             res.status(400).send({message: `Não passou na ValidationSlug`})
-        } else if (v5 == false) {
-            res.status(400).send({message: `Não passou na ValidationId`})
+        // } else if (v5 == false) {
+        //     res.status(400).send({message: `Não passou na ValidationId`})
         } else {
             try {
                 await products.where({id})
