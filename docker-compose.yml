@@ -6,7 +6,8 @@ services:
     ports: 
       - 3011:3011
     volumes:
-      - ./product
+      - /c/Users/User/Documents/ecomm/product:/app-node
+      # - ./product:node-app
     environment:
       - MYSQL_PORT=3306
       - MONGO_PORT=27017
@@ -26,7 +27,8 @@ services:
     ports: 
       - 3012:3012
     volumes:
-      - ./account
+      - /c/Users/User/Documents/ecomm/account:/app-node
+      # - ./account:node-app
     environment:
       - MYSQL_PORT=3306
       - MONGO_PORT=27017
@@ -44,7 +46,8 @@ services:
     container_name: ecomm-order
     build: ./order
     volumes:
-      - ./orders
+      - /c/Users/User/Documents/ecomm/order:/app-node
+      # - ./orders:node-app
     ports: 
       - 3013:3013
     environment:
@@ -68,7 +71,8 @@ services:
     container_name: ecomm-finance
     build: ./finance
     volumes:
-      - ./finance
+      - /c/Users/User/Documents/ecomm/finance:/app-node
+      # - ./finance:node-app
     ports: 
       - 3024:3024
     environment:
@@ -87,7 +91,7 @@ services:
     ports:
       - 27017:27017
     volumes:
-      - db-mongo:/store
+      - db-mongo:/data/db
     environment:
       - MONGO_INITDB_ROOT_USERNAME=admin
       - MONGO_INITDB_ROOT_PASSWORD=secret
@@ -106,7 +110,7 @@ services:
     image: mysql
     restart: always
     volumes:
-      - ecomm-mysql
+      - db-mysql:/var/lib/mysql
     ports: 
       - 3306:3306
     environment:
@@ -119,8 +123,6 @@ services:
       - ORDER_PORT=3013
       - FINANCE_PORT=3024
 
-    depends_on:
-      - mongo
 volumes:
-  ecomm-mysql:
+  db-mysql:
   db-mongo:
