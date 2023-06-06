@@ -1,0 +1,1 @@
+npm i dotenv express swagger-ui-express mongoose passport bcryptjs jsonwebtoken uuid passport-local passport-http-bearer

@@ -1,2 +1,2 @@
 use('ecomm-product');
-db.products.find({categoria: {$in : ["LIVROS", "CELULARES"]}})
+db.products.find({categoryName: {$in : ["LIVROS", "CELULARES"]}})

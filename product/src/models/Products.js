@@ -3,12 +3,12 @@ import mongoose from "mongoose";
 const productSchema = new mongoose.Schema (
     {   
         id: {type: String},
-        nomeProduto: {type: String, required: true},
-        descricaoProduto: {type: String},
+        productName: {type: String, required: true},
+        productDescription: {type: String},
         slug: {type: String},
-        precoUnitario: {type: Number},
-        quantidadeEmEstoque: {type: Number},
-        categoria: {type: mongoose.Schema.Types.ObjectId, ref: "categories"}
+        unitPrice: {type: Number},
+        stockQuantity: {type: Number},
+        category: { type: mongoose.Schema.Types.ObjectId }
     }, 
     {
         versionKey: false

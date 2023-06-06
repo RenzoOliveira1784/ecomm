@@ -43,8 +43,8 @@ services:
   order:
     container_name: ecomm-order
     build: ./order
-    volumes:
-      - ./orders
+    volumes:    
+     - ./orders
     ports: 
       - 3013:3013
     environment:
@@ -87,7 +87,7 @@ services:
     ports:
       - 27017:27017
     volumes:
-      - db-mongo:/store
+      - db-mongo:/data/db
     environment:
       - MONGO_INITDB_ROOT_USERNAME=admin
       - MONGO_INITDB_ROOT_PASSWORD=secret
@@ -106,7 +106,7 @@ services:
     image: mysql
     restart: always
     volumes:
-      - ecomm-mysql
+      - db-mysql:/var/lib/mysql
     ports: 
       - 3306:3306
     environment:
@@ -119,8 +119,6 @@ services:
       - ORDER_PORT=3013
       - FINANCE_PORT=3024
 
-    depends_on:
-      - mongo
 volumes:
-  ecomm-mysql:
+  db-mysql:
   db-mongo:

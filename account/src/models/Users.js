@@ -3,24 +3,24 @@ import mongoose from "mongoose";
 const userSchema = new mongoose.Schema (
     {
         id: { type: String },
-        nome: {type: String, required: true},
+        name: {type: String, required: true},
         email: {type: String, required: true},
-        senha: {type: String, required: true},
-        dataCriacaoUsuario: {type: Date},
+        password: {type: String, required: true},
+        userCreationDate: {type: Date},
         cpf: {type: String},
-        telefone: {type: String},
-        endereco: {
-            rua: {type: String, required: true},
-            numero: {type: String, required: true},
-            complemento: {type: String},
+        phoneNumber: {type: String},
+        address: {
+            street: {type: String, required: true},
+            number: {type: String, required: true},
+            complement: {type: String},
             cep: {type: String},
-            cidade: {type: String, required: true},
-            estado: {type: String, required: true},
+            city: {type: String, required: true},
+            state: {type: String, required: true},
         }
     }
 
 
 )
 
-const users = mongoose.model('Usuario', userSchema, 'Usuario')
+const users = mongoose.model('user', userSchema, 'user')
 export default users;

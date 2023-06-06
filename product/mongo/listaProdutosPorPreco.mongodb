@@ -1,2 +1,2 @@
 use('ecomm-product');
-db.products.find({precoUnitario: {$gte : 1000, $lte: 2000}}, {nomeProduto: 1, _id: 1, precoUnitario: 1})
+db.products.find({unitPrice: {$gte : 1000, $lte: 2000}}, {productName: 1, _id: 1, unitPrice: 1})

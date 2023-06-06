@@ -2,11 +2,11 @@ use('ecomm-order')
 db.pedidos.find({cliente: "Joao Paulo"}).toArray()[0].itens.forEach((item) => {
     use('ecomm-product')
     db.prodCateg.updateOne({
-        "nomeProduto": item.produto,
-        quantidadeEmEstoque: {$gte : item.quantidade}
+        "productName": item.produto,
+        stockPrice: {$gte : item.quantidade}
     },
     {
-        $inc: {"quantidadeEmEstoque": -item.quantidade}
+        $inc: {"stockPrice": -item.quantidade}
     })
 })
 
